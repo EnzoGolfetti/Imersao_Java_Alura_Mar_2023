@@ -1,5 +1,7 @@
 //imports - muito semelhante ao Python
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -23,7 +25,6 @@ public class App {
         HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
         String body = response.body();
         System.out.println(body);
-        
         //Filtrar e extrair apenas as informações que sejam de interesse do projeto
         //Título - Poster - Rating (Parsing)
         var parser = new JsonParser_Alura_Imersao_Java();
@@ -32,17 +33,19 @@ public class App {
         System.out.println(lista_de_filmes.get(0));
         
         //Exibir e manipular os dados
+        var gerador_figurinha = new Geradora_De_Figurinhas();
         for (Map<String,String> filme : lista_de_filmes) {
-            System.out.println(filme.get("title"));
-            System.out.println(filme.get("image"));
+            String UrlImagem = filme.get("image");
+            String title = filme.get("title");
+            String NomeArquivo = title + ".png";
+
+            InputStream inputStream = new URL(UrlImagem).openStream();
+            gerador_figurinha.cria(inputStream, NomeArquivo);
+            
+            System.out.println(title);
             System.out.println(filme.get("imDbRating"));
             System.out.println(); //printar um espaço em branco para ser a quebra de linha em cada iteração
             
         }
-
-
-
-
-    
     }
 }
